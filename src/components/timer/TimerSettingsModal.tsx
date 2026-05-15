@@ -66,21 +66,49 @@ export default function TimerSettingsModal({
 
         {/* Scroll Picker */}
         <div className="relative mb-6">
-          <div className="h-56 overflow-y-auto rounded-2xl bg-slate-800/60 p-2">
+          {/* Highlighted center selection zone */}
+          <div className="pointer-events-none absolute inset-x-5 top-1/2 -translate-y-1/2 h-12 rounded-xl border border-indigo-400/40 bg-indigo-500/10 z-10" />
+
+          <div
+            className="
+      h-56
+      overflow-y-auto
+      rounded-2xl
+      bg-slate-800/60
+      p-5
+      scroll-smooth
+      snap-y
+      snap-mandatory
+    "
+          >
+            {/* Top spacer */}
+            <div className="h-20" />
+
             {MINUTES.map((minute) => (
               <button
                 key={minute}
                 ref={minute === selectedMinutes ? selectedRef : null}
                 onClick={() => setSelectedMinutes(minute)}
-                className={`w-full rounded-lg py-3 text-lg transition ${
-                  minute === selectedMinutes
-                    ? "bg-indigo-600 font-semibold"
-                    : "hover:bg-slate-700"
-                }`}
+                className={`
+          w-full
+          h-12
+          snap-center
+          rounded-lg
+          text-lg
+          transition
+          ${
+            minute === selectedMinutes
+              ? "bg-indigo-600 font-semibold"
+              : "hover:bg-slate-700 text-slate-300"
+          }
+        `}
               >
                 {minute} minute{minute > 1 ? "s" : ""}
               </button>
             ))}
+
+            {/* Bottom spacer */}
+            <div className="h-20" />
           </div>
         </div>
 
