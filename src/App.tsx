@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useTimerStore } from "./store/useTimerStore";
 import Header from "./components/layout/Header";
 import FocusMode from "./components/layout/FocusMode";
 import SessionNotes from "./components/notes/SessionNotes";
@@ -13,6 +15,11 @@ export default function App() {
 
   const timer = <TimerCard />;
   const music = <MusicCard />;
+  const initializeTimer = useTimerStore((state) => state.initialize);
+
+  useEffect(() => {
+    initializeTimer();
+  }, [initializeTimer]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
