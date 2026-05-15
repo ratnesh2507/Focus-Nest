@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { X } from "lucide-react";
 
 type Props = {
   isOpen: boolean;
@@ -7,7 +8,12 @@ type Props = {
   onSave: (minutes: number) => void;
 };
 
-const PRESETS = [25, 50, 90];
+const PRESETS = [
+  { label: "5 min", value: 5 },
+  { label: "25 min", value: 25 },
+  { label: "50 min", value: 50 },
+  { label: "90 min", value: 90 },
+];
 const MINUTES = Array.from({ length: 180 }, (_, i) => i + 1);
 
 export default function TimerSettingsModal({
@@ -21,12 +27,8 @@ export default function TimerSettingsModal({
 
   useEffect(() => {
     if (!isOpen) return;
-
-    const timer = window.setTimeout(() => {
-      setSelectedMinutes(initialMinutes);
-    }, 0);
-
-    return () => window.clearTimeout(timer);
+    const t = window.setTimeout(() => setSelectedMinutes(initialMinutes), 0);
+    return () => window.clearTimeout(t);
   }, [isOpen, initialMinutes]);
 
   useEffect(() => {
@@ -41,94 +43,103 @@ export default function TimerSettingsModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-slate-900 p-6 shadow-2xl">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
-          Timer Settings
-        </h2>
-
-        {/* Presets */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          {PRESETS.map((preset) => (
-            <button
-              key={preset}
-              onClick={() => setSelectedMinutes(preset)}
-              className={`rounded-xl px-4 py-3 transition ${
-                selectedMinutes === preset
-                  ? "bg-indigo-600"
-                  : "bg-slate-800 hover:bg-slate-700"
-              }`}
-            >
-              {preset}m
-            </button>
-          ))}
+    /* Backdrop */
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-md"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      {/* Panel */}
+      <div className="w-full max-w-95 flex flex-col bg-card border border-border-md rounded-card overflow-hidden">
+        {/* Modal header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-border">
+          <span className="font-display text-lg text-text">Set Duration</span>
+          <button
+            onClick={onClose}
+            className="flex items-center justify-center p-1 bg-lift border border-border rounded-sm text-muted cursor-pointer hover:text-text transition-colors"
+          >
+            <X size={14} />
+          </button>
         </div>
 
-        {/* Scroll Picker */}
-        <div className="relative mb-6">
-          {/* Highlighted center selection zone */}
-          <div className="pointer-events-none absolute inset-x-5 top-1/2 -translate-y-1/2 h-12 rounded-xl border border-indigo-400/40 bg-indigo-500/10 z-10" />
+        <div className="px-6 pt-5">
+          {/* Preset pills */}
+          <div className="grid grid-cols-4 gap-2 mb-5">
+            {PRESETS.map((p) => {
+              const active = selectedMinutes === p.value;
+              return (
+                <button
+                  key={p.value}
+                  onClick={() => setSelectedMinutes(p.value)}
+                  className={`font-mono text-xs py-2 rounded-sm border cursor-pointer transition-colors
+                    ${
+                      active
+                        ? "bg-amber-glow border-amber-dim text-amber"
+                        : "bg-lift border-border text-muted hover:bg-hover"
+                    }`}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
+          </div>
 
-          <div
-            className="
-      h-56
-      overflow-y-auto
-      rounded-2xl
-      bg-slate-800/60
-      p-5
-      scroll-smooth
-      snap-y
-      snap-mandatory
-    "
-          >
-            {/* Top spacer */}
-            <div className="h-20" />
+          {/* Large selected value display */}
+          <div className="text-center mb-4">
+            <span className="font-display text-5xl text-amber leading-none">
+              {selectedMinutes}
+            </span>
+            <span className="font-mono text-sm text-muted ml-1.5">min</span>
+          </div>
+        </div>
 
-            {MINUTES.map((minute) => (
+        {/* Scroll picker */}
+        <div className="relative mx-6 mb-5">
+          {/* Top fade */}
+          <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-linear-to-b from-card to-transparent z-10" />
+          {/* Bottom fade */}
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-linear-to-t from-card to-transparent z-10" />
+          {/* Selection highlight */}
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-10 bg-amber-glow border border-amber-dim rounded-sm z-10" />
+
+          <div className="picker-scroll h-44 overflow-y-auto snap-y snap-mandatory bg-lift rounded-sm">
+            <div className="h-17.5" />
+            {MINUTES.map((m) => (
               <button
-                key={minute}
-                ref={minute === selectedMinutes ? selectedRef : null}
-                onClick={() => setSelectedMinutes(minute)}
-                className={`
-          w-full
-          h-12
-          snap-center
-          rounded-lg
-          text-lg
-          transition
-          ${
-            minute === selectedMinutes
-              ? "bg-indigo-600 font-semibold"
-              : "hover:bg-slate-700 text-slate-300"
-          }
-        `}
+                key={m}
+                ref={m === selectedMinutes ? selectedRef : null}
+                onClick={() => setSelectedMinutes(m)}
+                className={`w-full h-10 snap-center bg-transparent border-0 cursor-pointer transition-colors font-mono
+                  ${
+                    m === selectedMinutes
+                      ? "text-amber text-sm font-medium"
+                      : "text-faint text-xs font-light hover:text-muted"
+                  }`}
               >
-                {minute} minute{minute > 1 ? "s" : ""}
+                {m} {m === 1 ? "minute" : "minutes"}
               </button>
             ))}
-
-            {/* Bottom spacer */}
-            <div className="h-20" />
+            <div className="h-17.5" />
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3">
+        <div className="flex gap-2 px-6 py-5 border-t border-border">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl bg-slate-800 py-3 hover:bg-slate-700 transition"
+            className="flex-1 font-ui text-sm font-medium py-2.5 rounded-btn border cursor-pointer transition-colors bg-lift border-border text-muted hover:bg-hover"
           >
             Cancel
           </button>
-
           <button
             onClick={() => {
               onSave(selectedMinutes);
               onClose();
             }}
-            className="flex-1 rounded-xl bg-indigo-600 py-3 font-medium hover:bg-indigo-500 transition"
+            className="flex-1 font-ui text-sm font-medium py-2.5 rounded-btn border cursor-pointer transition-colors bg-amber-glow border-amber-dim text-amber hover:bg-amber/22"
           >
-            Save
+            Apply
           </button>
         </div>
       </div>

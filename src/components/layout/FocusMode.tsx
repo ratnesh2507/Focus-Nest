@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { X, Moon } from "lucide-react";
+import { X } from "lucide-react";
 
 type Props = {
   isOpen: boolean;
@@ -13,9 +13,7 @@ export default function FocusMode({ isOpen, onClose, timer, music }: Props) {
     if (!isOpen) return;
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        onClose();
-      }
+      if (e.key === "Escape") onClose();
     }
 
     window.addEventListener("keydown", handleKeyDown);
@@ -30,59 +28,36 @@ export default function FocusMode({ isOpen, onClose, timer, music }: Props) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-950 text-white">
-      {/* Ambient Background Effects */}
-      <div className="absolute inset-0">
-        {/* Subtle gradient */}
-        <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-black" />
-
-        {/* Soft glowing orbs */}
-        <div className="absolute top-20 left-1/4 h-72 w-72 rounded-full bg-indigo-600/10 blur-3xl" />
-        <div className="absolute bottom-24 right-1/4 h-72 w-72 rounded-full bg-purple-600/10 blur-3xl" />
-
-        {/* Light vignette */}
-        <div className="absolute inset-0 bg-black/20" />
+    <div className="focus-overlay fixed inset-0 z-50 overflow-hidden bg-bg">
+      {/* Ambient orbs — purely decorative, cannot be done without some values */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[15%] left-[10%] w-125 h-125 rounded-full bg-amber/[0.04] blur-[80px]" />
+        <div className="absolute bottom-[10%] right-[8%]  w-100 h-100 rounded-full bg-green/[0.04]  blur-[80px]" />
       </div>
 
-      {/* Top Bar */}
-      <div className="absolute top-0 left-0 right-0 z-100 px-6 py-5 pointer-events-none">
-        <div className="mx-auto max-w-7xl flex items-center justify-between">
-          {/* Focus Indicator */}
-          <div className="pointer-events-auto flex items-center gap-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl px-4 py-2">
-            <Moon size={16} className="text-indigo-400" />
-            <span className="text-sm font-medium text-slate-200">
-              Focus Mode
-            </span>
-          </div>
-
-          {/* Exit Button */}
-          <button
-            type="button"
-            onClick={() => onClose()}
-            className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl px-4 py-2 text-sm font-medium text-slate-200 hover:bg-white/10 transition cursor-pointer"
-            title="Exit Focus Mode (Esc)"
-          >
-            <X size={16} />
-            Exit
-          </button>
+      {/* Top bar */}
+      <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-4 border-b border-border bg-bg/80 backdrop-blur-xl">
+        <div className="flex items-center gap-2.5">
+          <span className="font-display text-base text-text">Focus Nest</span>
+          <span className="font-mono text-[10px] tracking-widest text-amber bg-amber-glow border border-amber-dim rounded px-1.5 py-0.5">
+            FOCUS MODE
+          </span>
         </div>
+
+        <button
+          onClick={onClose}
+          className="flex items-center gap-2 font-ui text-sm text-muted bg-lift border border-border-md rounded-btn px-3 py-1.5 cursor-pointer transition-colors hover:text-text"
+        >
+          <X size={13} />
+          Exit
+          <span className="font-mono text-[10px] text-faint">esc</span>
+        </button>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 h-full flex md:flex-row flex-col gap-4 items-center justify-around px-6 pt-28 pb-8">
-        {/* Timer Section */}
-        <div className="md:w-2xl w-xl max-w-3xl">
-          <div className="rounded-4xl border border-white/10 bg-white/3 backdrop-blur-2xl shadow-2xl">
-            {timer}
-          </div>
-        </div>
-
-        {/* Music Section */}
-        <div className="w-xl max-w-5xl">
-          <div className="rounded-4xl border border-white/10 bg-white/3 backdrop-blur-2xl shadow-2xl p-4">
-            {music}
-          </div>
-        </div>
+      {/* Content */}
+      <div className="h-full flex flex-col md:flex-row items-center justify-center gap-6 px-6 pt-18 pb-6">
+        <div className="w-full max-w-90">{timer}</div>
+        <div className="w-full max-w-105">{music}</div>
       </div>
     </div>
   );

@@ -13,7 +13,6 @@ export async function notifySessionComplete() {
     if (Notification.permission === "granted") {
       new Notification("Focus Nest", {
         body: "Your study session is complete.",
-        icon: "/favicon.ico",
       });
     }
   }

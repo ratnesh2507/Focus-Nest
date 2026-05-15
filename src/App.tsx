@@ -22,18 +22,34 @@ export default function App() {
   }, [initializeTimer]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div
+      className="min-h-screen"
+      style={{ background: "var(--bg)", color: "var(--text)" }}
+    >
       {!isFocusMode ? (
         <>
           <Header onToggleFocusMode={() => setIsFocusMode(true)} />
 
-          <main className="max-w-7xl mx-auto p-6 h-[calc(100vh-4rem)]">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
-              <div className="lg:col-span-3 h-full min-h-100">
+          <main
+            className="mx-auto px-6 py-6"
+            style={{
+              maxWidth: "1400px",
+              height: "calc(100vh - 3.5rem)",
+            }}
+          >
+            <div
+              className="grid gap-5 h-full"
+              style={{
+                gridTemplateColumns: "1fr 320px",
+              }}
+            >
+              {/* Notes — full height journal */}
+              <div className="h-full min-h-0">
                 <SessionNotes />
               </div>
 
-              <div className="lg:col-span-1 flex flex-col gap-6">
+              {/* Right sidebar: timer + music stacked */}
+              <div className="flex flex-col gap-5 min-h-0">
                 {timer}
                 {music}
               </div>
