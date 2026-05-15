@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useTimer } from "../../hooks/useTimer";
+import { useTimerStore } from "../../store/useTimerStore";
 import { formatTime } from "../../lib/formatTime";
 import TimerSettingsModal from "./TimerSettingsModal";
 
@@ -17,7 +17,7 @@ export default function TimerCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { duration, timeLeft, isRunning, start, pause, reset, setMinutes } =
-    useTimer(5 * 60);
+    useTimerStore();
 
   // Convert duration (stored in seconds) to minutes for the modal
   const currentMinutes = Math.max(1, Math.floor(duration / 60));
