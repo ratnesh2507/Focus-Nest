@@ -6,38 +6,14 @@ type Props = {
 
 export default function Header({ onToggleFocusMode }: Props) {
   return (
-    <header
-      className="sticky top-0 z-10 h-14"
-      style={{
-        background: "rgba(14,18,16,0.85)",
-        borderBottom: "1px solid var(--border)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-      }}
-    >
-      <div
-        className="h-full mx-auto px-6 flex items-center justify-between"
-        style={{ maxWidth: "1400px" }}
-      >
+    <header className="sticky top-0 z-10 h-14 bg-bg/85 border-b border-border backdrop-blur-xl">
+      <div className="h-full mx-auto max-w-350 px-6 flex items-center justify-between">
         {/* Wordmark */}
         <div className="flex items-center gap-2.5">
-          <span
-            className="text-lg tracking-tight"
-            style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}
-          >
+          <span className="font-display text-lg tracking-tight text-text">
             Focus Nest
           </span>
-          <span
-            className="text-xs px-1.5 py-0.5 rounded"
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "10px",
-              background: "var(--bg-lift)",
-              color: "var(--text-muted)",
-              border: "1px solid var(--border)",
-              letterSpacing: "0.08em",
-            }}
-          >
+          <span className="font-mono text-[10px] tracking-widest text-muted bg-lift border border-border rounded px-1.5 py-0.5">
             v1
           </span>
         </div>
@@ -45,24 +21,7 @@ export default function Header({ onToggleFocusMode }: Props) {
         {/* Focus Mode CTA */}
         <button
           onClick={onToggleFocusMode}
-          className="flex items-center gap-2 text-sm font-medium transition-all"
-          style={{
-            fontFamily: "var(--font-ui)",
-            background: "var(--amber-glow)",
-            color: "var(--amber)",
-            border: "1px solid var(--amber-dim)",
-            borderRadius: "var(--radius-btn)",
-            padding: "6px 14px",
-            cursor: "pointer",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "rgba(212,145,74,0.22)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "var(--amber-glow)";
-          }}
+          className="flex items-center gap-2 font-ui text-sm font-medium text-amber bg-amber-glow border border-amber-dim rounded-btn px-3.5 py-1.5 cursor-pointer transition-colors hover:bg-amber/22"
         >
           <Moon size={13} />
           Focus Mode

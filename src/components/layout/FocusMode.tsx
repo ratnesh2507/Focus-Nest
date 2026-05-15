@@ -31,8 +31,8 @@ export default function FocusMode({ isOpen, onClose, timer, music }: Props) {
     <div className="focus-overlay fixed inset-0 z-50 overflow-hidden bg-bg">
       {/* Ambient orbs — purely decorative, cannot be done without some values */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[15%] left-[10%] w-125 h-125 rounded-full bg-amber/[0.04] blur-[80px]" />
-        <div className="absolute bottom-[10%] right-[8%]  w-100 h-100 rounded-full bg-green/[0.04]  blur-[80px]" />
+        <div className="absolute top-[15%] left-[10%] w-125 h-125 rounded-full bg-amber/4 blur-[80px]" />
+        <div className="absolute bottom-[10%] right-[8%]  w-100 h-100 rounded-full bg-green/4  blur-[80px]" />
       </div>
 
       {/* Top bar */}

@@ -1,97 +1,87 @@
-# Focus Nest 🌙🕒
+<div align="center">
 
-A modern and minimalist **Study With Me** web application built with React, TypeScript, Tailwind CSS, and [Zustand](https://zustand-demo.pmnd.rs?utm_source=chatgpt.com).
+<!-- <img src="public/favicon.svg" alt="Focus Nest Logo" width="56" height="56" /> -->
 
-Focus Nest helps students and developers stay productive with a customizable Pomodoro timer, distraction-free Focus Mode, session notes, and ambient lofi music.
+# Focus Nest
 
----
+**A minimalist Study With Me app — Pomodoro timer, session notes, lofi music, and distraction-free Focus Mode.**
 
-## ✨ Features (v1)
+[![MIT License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+[![Built with React](https://img.shields.io/badge/React-18-61dafb?style=flat-square&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Vite](https://img.shields.io/badge/Vite-6-646cff?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
 
-### ⏱️ Advanced Pomodoro Timer
-
-- Preset durations (1, 5, 10, 15, 25, 50, 90 minutes)
-- Custom timer selection using a smooth scroll-snap picker
-- Start, Pause, Reset, and Restart controls
-- Persistent timer state across page refreshes
-- Completion alarm sound
-- Browser notifications
-- Toast notifications using [react-hot-toast](https://react-hot-toast.com?utm_source=chatgpt.com)
-
-### 📝 Session Notes
-
-- Large note-taking area for each study session
-- Automatically persisted in local storage
-
-### 🎧 Ambient Music
-
-- Embedded YouTube live lofi stream
-
-### 🌙 Focus Mode
-
-- Full-screen distraction-free interface
-- Beautiful glassmorphism design
-- Large timer and music player layout
-- Exit using button or `Esc` key
-
-### 💾 Persistence
-
-- Timer settings and remaining time saved using [Zustand Persist Middleware](https://docs.pmnd.rs/zustand/integrations/persisting-store-data?utm_source=chatgpt.com)
-- Notes and preferences stored locally
-
-### 📱 Responsive Design
-
-- Works across desktop and mobile devices
+</div>
 
 ---
 
-## 🛠️ Tech Stack
+## Preview
 
-| Category         | Technology                                                            |
-| ---------------- | --------------------------------------------------------------------- |
-| Frontend         | React + TypeScript                                                    |
-| Styling          | Tailwind CSS                                                          |
-| Build Tool       | [Vite](https://vite.dev?utm_source=chatgpt.com)                       |
-| Package Manager  | [Bun](https://bun.sh?utm_source=chatgpt.com)                          |
-| State Management | [Zustand](https://zustand-demo.pmnd.rs?utm_source=chatgpt.com)        |
-| Notifications    | [react-hot-toast](https://react-hot-toast.com?utm_source=chatgpt.com) |
-| Icons            | [Lucide React](https://lucide.dev?utm_source=chatgpt.com)             |
-| Persistence      | Browser Local Storage                                                 |
+**Home view** — notes, timer, and music in one layout.
+
+![Focus Nest — Home](public/home.png)
+
+**Focus Mode** — full-screen, distraction-free workspace.
+
+![Focus Nest — Focus Mode](public/focus.png)
 
 ---
 
-## 📂 Project Structure
+## Features
 
-```text
+|     | Feature                   | Details                                                                                   |
+| --- | ------------------------- | ----------------------------------------------------------------------------------------- |
+| ⏱   | **Pomodoro Timer**        | Preset durations (1 – 90 min), custom scroll-snap picker, Start / Pause / Reset / Restart |
+| 🔔  | **Session Notifications** | Toast, browser notification, and alarm sound on completion                                |
+| 📝  | **Session Notes**         | Full-height notepad, auto-persisted to localStorage                                       |
+| 🎧  | **Lofi Radio**            | Embedded YouTube live stream                                                              |
+| 🌙  | **Focus Mode**            | Full-screen glassmorphism overlay, `Esc` to exit                                          |
+| 💾  | **Persistence**           | Timer state via Zustand persist middleware, notes via localStorage                        |
+| 📱  | **Responsive**            | Works on desktop and mobile                                                               |
+
+---
+
+## Tech Stack
+
+| Category         | Technology                   |
+| ---------------- | ---------------------------- |
+| Frontend         | React 18 + TypeScript        |
+| Styling          | Tailwind CSS v4              |
+| Build            | Vite                         |
+| Package manager  | Bun                          |
+| State management | Zustand + persist middleware |
+| Notifications    | react-hot-toast              |
+| Icons            | Lucide React                 |
+| Storage          | Browser localStorage         |
+
+---
+
+## Project Structure
+
+```
 src/
 ├── components/
 │   ├── layout/
-│   │   ├── Header.tsx
-│   │   └── FocusMode.tsx
-│   │
+│   │   ├── Header.tsx           # Top nav + Focus Mode trigger
+│   │   └── FocusMode.tsx        # Full-screen overlay
 │   ├── timer/
-│   │   ├── TimerCard.tsx
-│   │   └── TimerSettingsModal.tsx
-│   │
+│   │   ├── TimerCard.tsx        # Pomodoro ring + controls
+│   │   └── TimerSettingsModal.tsx  # Scroll-snap duration picker
 │   ├── music/
-│   │   └── MusicCard.tsx
-│   │
+│   │   └── MusicCard.tsx        # YouTube lofi embed
 │   └── notes/
-│       └── SessionNotes.tsx
-│
+│       └── SessionNotes.tsx     # Ruled notepad
 ├── hooks/
 │   └── useLocalStorage.ts
-│
 ├── store/
-│   └── useTimerStore.ts
-│
+│   └── useTimerStore.ts         # Zustand timer store
 ├── lib/
 │   ├── formatTime.ts
 │   └── notifySessionComplete.ts
-│
 ├── App.tsx
 ├── main.tsx
-└── index.css
+└── index.css                    # Tailwind v4 @theme tokens
 
 public/
 └── alarm.mp3
@@ -99,190 +89,89 @@ public/
 
 ---
 
-## 🚀 Getting Started
+## How the Timer Works
 
-### 1. Clone the Repository
+All timer logic lives in a single Zustand store, making state seamlessly shared between the normal view and Focus Mode.
 
-```bash
-git clone https://github.com/your-username/focus-nest.git
-cd focus-nest
+```
+UI Components  →  useTimerStore (Zustand)  →  setInterval
+                                                   ↓
+                              localStorage  ←  Notifications + Alarm
 ```
 
-### 2. Install Dependencies
+On page refresh, the persisted `isRunning` flag is detected by `initialize()`, which re-creates the interval — so your session survives a reload.
+
+---
+
+## Getting Started
+
+**Prerequisites:** [Bun](https://bun.sh) ≥ 1.0
 
 ```bash
+# 1. Clone
+git clone https://github.com/ratnesh2507/Focus-Nest.git
+cd Focus-Nest
+
+# 2. Install dependencies
 bun install
-```
 
-### 3. Start Development Server
-
-```bash
+# 3. Start dev server
 bun run dev
 ```
 
-### 4. Open in Browser
-
-```text
-http://localhost:5173
-```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## 📦 Key Dependencies
+## Roadmap
 
-```bash
-bun add zustand react-hot-toast lucide-react
-```
+### v2 — Accounts & Cloud
 
----
+- [ ] Authentication via Supabase
+- [ ] Cloud sync across devices
+- [ ] Daily streaks
+- [ ] Sessions completed today
+- [ ] Full study history
 
-## 🧠 Core Concepts Learned
+### v3 — Analytics & AI
 
-This project demonstrates several important frontend engineering concepts:
-
-- Custom React hooks
-- Global state management with Zustand
-- Persistent state using local storage
-- Modal dialogs with backdrop blur
-- Scroll-snap interfaces
-- Browser Notifications API
-- Audio playback with the Web Audio API
-- Full-screen overlays
-- Responsive layouts with Tailwind CSS
+- [ ] Analytics dashboard with calendar heatmaps
+- [ ] Custom themes
+- [ ] Task management
+- [ ] AI-powered study insights
 
 ---
 
-## ⏳ How the Timer Works
+## Product Vision
 
-The timer logic is centralized in a global Zustand store.
+Focus Nest is built to grow into a freemium productivity platform.
 
-```text
-UI Components
-     ↓
-useTimerStore (Zustand)
-     ↓
-setInterval
-     ↓
-Notifications + Alarm
-     ↓
-Local Storage Persistence
-```
-
-This design ensures the timer continues seamlessly when switching between normal mode and Focus Mode.
+| Tier                   | What's included                                              |
+| ---------------------- | ------------------------------------------------------------ |
+| **Free**               | Timer, notes, Focus Mode, lofi music, local persistence      |
+| **Account**            | Cloud sync, streaks, statistics, history                     |
+| **Premium** _(future)_ | Advanced analytics, themes, integrations, AI recommendations |
 
 ---
 
-## 🌙 Focus Mode
+## License
 
-Focus Mode is a distraction-free workspace that displays:
-
-- A large countdown timer
-- Embedded lofi music
-- Ambient gradient background
-- Keyboard shortcut support (`Esc` to exit)
-
-This creates a clean study environment similar to dedicated productivity applications.
+MIT — see [LICENSE](LICENSE) for details.
 
 ---
 
-## 🔔 Notifications
+## Author
 
-When a session ends, Focus Nest:
+**Ratnesh BVK** — Full-Stack Web Developer & part-time YouTuber
 
-1. Shows a toast notification
-2. Sends a browser notification
-3. Plays an alarm sound
-
-This helps users stay aware even when working in another tab.
+[GitHub →](https://github.com/ratnesh2507)
 
 ---
 
-## 🗺️ Roadmap
+<div align="center">
 
-### Version 2
+_Focus Nest is a simple yet powerful productivity companion built to help you stay focused, consistent, and motivated._
 
-- Authentication with [Supabase](https://supabase.com?utm_source=chatgpt.com)
-- Cloud synchronization
-- Daily streaks
-- Sessions completed today
-- Study history
-- Multi-device access
+⭐ Star the repo if you find it useful!
 
-### Version 3
-
-- Analytics dashboard
-- Calendar heatmaps
-- Custom themes
-- Task management
-- AI-powered study insights
-
----
-
-## 💡 Product Vision
-
-Focus Nest is designed as a freemium productivity platform:
-
-### Free Version
-
-- Timer
-- Notes
-- Focus Mode
-- Music
-- Local persistence
-
-### Account Features
-
-- Cloud sync
-- Statistics
-- Streaks
-- History
-
-### Premium Features (Future)
-
-- Advanced analytics
-- Themes
-- Integrations
-- AI recommendations
-
----
-
-## 📚 What I Learned
-
-Building Focus Nest helped me gain practical experience with:
-
-- Architecting scalable React applications
-- Managing shared state with Zustand
-- Persisting application state
-- Creating polished user interfaces
-- Integrating browser APIs
-- Designing products with SaaS evolution in mind
-
----
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
----
-
-## 👨‍💻 Author
-
-**Ratnesh BVK**
-
-- [GitHub](https://github.com/ratnesh2507?utm_source=chatgpt.com)
-- Part-time YouTuber
-- Full-Stack Web Developer
-
----
-
-## ⭐ Support
-
-If you find this project useful:
-
-- Star the repository on [GitHub](https://github.com/ratnesh2507?utm_source=chatgpt.com)
-- Share it with friends
-- Use it in your daily study sessions
-
----
-
-> Focus Nest is a simple yet powerful productivity companion built to help you stay focused, consistent, and motivated.
+</div>

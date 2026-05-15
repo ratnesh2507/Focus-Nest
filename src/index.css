@@ -1,40 +1,45 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap");
 @import "tailwindcss";
 
-/* ─── Design Tokens ─────────────────────────────────────────────── */
-:root {
-  --bg: #0e1210;
-  --bg-card: #131a16;
-  --bg-lift: #192019;
-  --bg-hover: #1f2a20;
+/* ─── Tailwind v4 Theme ──────────────────────────────────────────── */
+@theme {
+  /* Colors */
+  --color-bg: #0e1210;
+  --color-card: #131a16;
+  --color-lift: #192019;
+  --color-hover: #1f2a20;
 
-  --border: rgba(255 255 255 / 0.07);
-  --border-md: rgba(255 255 255 / 0.12);
+  --color-border: rgba(255, 255, 255, 0.07);
+  --color-border-md: rgba(255, 255, 255, 0.12);
 
-  --text: #e8ebe6;
-  --text-muted: #8a9488;
-  --text-faint: #4a5549;
+  --color-text: #e8ebe6;
+  --color-muted: #8a9488;
+  --color-faint: #4a5549;
 
-  --amber: #d4914a;
-  --amber-dim: #8c5e2e;
-  --amber-glow: rgba(212 145 74 / 0.15);
+  --color-amber: #d4914a;
+  --color-amber-dim: #8c5e2e;
+  --color-amber-glow: rgba(212, 145, 74, 0.15);
 
-  --green: #4a8c5c;
-  --green-dim: #2a5438;
-  --green-glow: rgba(74 140 92 / 0.15);
+  --color-green: #4a8c5c;
+  --color-green-dim: #2a5438;
+  --color-green-glow: rgba(74, 140, 92, 0.15);
 
-  --danger: #8c4a4a;
+  --color-danger: #8c4a4a;
+  --color-danger-dim: rgba(140, 74, 74, 0.4);
+  --color-danger-glow: rgba(140, 74, 74, 0.1);
 
+  /* Border radius */
   --radius-card: 20px;
   --radius-btn: 10px;
   --radius-sm: 7px;
 
+  /* Font families */
   --font-display: "DM Serif Display", Georgia, serif;
   --font-ui: "Instrument Sans", system-ui, sans-serif;
   --font-mono: "DM Mono", "Fira Code", monospace;
 }
 
-/* ─── Reset & Base ───────────────────────────────────────────────── */
+/* ─── Base ───────────────────────────────────────────────────────── */
 html,
 body,
 #root {
@@ -44,12 +49,12 @@ body,
 body {
   margin: 0;
   font-family: var(--font-ui);
-  background: var(--bg);
-  color: var(--text);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   -webkit-font-smoothing: antialiased;
 }
 
-/* ─── Grain Texture Overlay ──────────────────────────────────────── */
+/* ─── Grain overlay ──────────────────────────────────────────────── */
 body::before {
   content: "";
   position: fixed;
@@ -61,7 +66,6 @@ body::before {
   background-size: 200px 200px;
 }
 
-/* Ensure content sits above grain */
 #root {
   position: relative;
   z-index: 1;
@@ -75,29 +79,31 @@ body::before {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--text-faint);
+  background: var(--color-faint);
   border-radius: 2px;
 }
 
-/* ─── Timer Ring SVG ─────────────────────────────────────────────── */
+/* ─── Textarea ───────────────────────────────────────────────────── */
+textarea {
+  font-family: var(--font-ui);
+}
+textarea::placeholder {
+  color: var(--color-faint);
+  font-style: italic;
+}
+
+/* ─── Timer ring ─────────────────────────────────────────────────── */
 .timer-ring-track {
-  stroke: var(--border-md);
+  stroke: var(--color-border-md);
 }
 .timer-ring-fill {
-  stroke: var(--amber);
+  stroke: var(--color-amber);
   stroke-linecap: round;
   transition: stroke-dashoffset 1s linear;
-  filter: drop-shadow(0 0 6px var(--amber));
+  filter: drop-shadow(0 0 6px var(--color-amber));
 }
 
-/* ─── Preset pill active ─────────────────────────────────────────── */
-.preset-active {
-  background: var(--amber-glow);
-  border-color: var(--amber-dim);
-  color: var(--amber);
-}
-
-/* ─── Focus mode transition ──────────────────────────────────────── */
+/* ─── Focus mode entrance ────────────────────────────────────────── */
 .focus-overlay {
   animation: focusIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -112,10 +118,22 @@ body::before {
   }
 }
 
-/* ─── Textarea reset ─────────────────────────────────────────────── */
-textarea {
-  font-family: var(--font-ui);
-  field-sizing: content;
+/* ─── Notes ruled lines ──────────────────────────────────────────── */
+.notes-ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent calc(1.75rem - 1px),
+    rgba(255, 255, 255, 0.03) calc(1.75rem - 1px),
+    rgba(255, 255, 255, 0.03) 1.75rem
+  );
+  background-position-y: 4.5rem;
 }
 
-/* ─── Toaster override (accessed via main.tsx) ───────────────────── */
+/* ─── Scroll picker — hide scrollbar ────────────────────────────── */
+.picker-scroll {
+  scrollbar-width: none;
+}
+.picker-scroll::-webkit-scrollbar {
+  display: none;
+}
