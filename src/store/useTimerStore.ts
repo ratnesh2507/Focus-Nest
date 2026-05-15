@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { notifySessionComplete } from "../lib/notifySessionComplete";
 
 type TimerStore = {
   duration: number;
@@ -19,9 +20,14 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
   intervalId: null,
 
   start: () => {
-    const { isRunning, timeLeft } = get();
+    const { isRunning, timeLeft, duration } = get();
 
-    if (isRunning || timeLeft <= 0) return;
+    if (isRunning) return;
+
+    // If the timer has finished, restart from the full duration
+    if (timeLeft <= 0) {
+      set({ timeLeft: duration });
+    }
 
     const intervalId = window.setInterval(() => {
       const { timeLeft, pause } = get();
@@ -29,6 +35,7 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
       if (timeLeft <= 1) {
         set({ timeLeft: 0 });
         pause();
+        notifySessionComplete();
         return;
       }
 
