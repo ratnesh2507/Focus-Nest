@@ -1,73 +1,288 @@
-# React + TypeScript + Vite
+# Focus Nest 🌙🕒
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and minimalist **Study With Me** web application built with React, TypeScript, Tailwind CSS, and [Zustand](https://zustand-demo.pmnd.rs?utm_source=chatgpt.com).
 
-Currently, two official plugins are available:
+Focus Nest helps students and developers stay productive with a customizable Pomodoro timer, distraction-free Focus Mode, session notes, and ambient lofi music.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Features (v1)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### ⏱️ Advanced Pomodoro Timer
 
-## Expanding the ESLint configuration
+- Preset durations (1, 5, 10, 15, 25, 50, 90 minutes)
+- Custom timer selection using a smooth scroll-snap picker
+- Start, Pause, Reset, and Restart controls
+- Persistent timer state across page refreshes
+- Completion alarm sound
+- Browser notifications
+- Toast notifications using [react-hot-toast](https://react-hot-toast.com?utm_source=chatgpt.com)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 📝 Session Notes
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+- Large note-taking area for each study session
+- Automatically persisted in local storage
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🎧 Ambient Music
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+- Embedded YouTube live lofi stream
+
+### 🌙 Focus Mode
+
+- Full-screen distraction-free interface
+- Beautiful glassmorphism design
+- Large timer and music player layout
+- Exit using button or `Esc` key
+
+### 💾 Persistence
+
+- Timer settings and remaining time saved using [Zustand Persist Middleware](https://docs.pmnd.rs/zustand/integrations/persisting-store-data?utm_source=chatgpt.com)
+- Notes and preferences stored locally
+
+### 📱 Responsive Design
+
+- Works across desktop and mobile devices
+
+---
+
+## 🛠️ Tech Stack
+
+| Category         | Technology                                                            |
+| ---------------- | --------------------------------------------------------------------- |
+| Frontend         | React + TypeScript                                                    |
+| Styling          | Tailwind CSS                                                          |
+| Build Tool       | [Vite](https://vite.dev?utm_source=chatgpt.com)                       |
+| Package Manager  | [Bun](https://bun.sh?utm_source=chatgpt.com)                          |
+| State Management | [Zustand](https://zustand-demo.pmnd.rs?utm_source=chatgpt.com)        |
+| Notifications    | [react-hot-toast](https://react-hot-toast.com?utm_source=chatgpt.com) |
+| Icons            | [Lucide React](https://lucide.dev?utm_source=chatgpt.com)             |
+| Persistence      | Browser Local Storage                                                 |
+
+---
+
+## 📂 Project Structure
+
+```text
+src/
+├── components/
+│   ├── layout/
+│   │   ├── Header.tsx
+│   │   └── FocusMode.tsx
+│   │
+│   ├── timer/
+│   │   ├── TimerCard.tsx
+│   │   └── TimerSettingsModal.tsx
+│   │
+│   ├── music/
+│   │   └── MusicCard.tsx
+│   │
+│   └── notes/
+│       └── SessionNotes.tsx
+│
+├── hooks/
+│   └── useLocalStorage.ts
+│
+├── store/
+│   └── useTimerStore.ts
+│
+├── lib/
+│   ├── formatTime.ts
+│   └── notifySessionComplete.ts
+│
+├── App.tsx
+├── main.tsx
+└── index.css
+
+public/
+└── alarm.mp3
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+## 🚀 Getting Started
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/focus-nest.git
+cd focus-nest
 ```
+
+### 2. Install Dependencies
+
+```bash
+bun install
+```
+
+### 3. Start Development Server
+
+```bash
+bun run dev
+```
+
+### 4. Open in Browser
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 📦 Key Dependencies
+
+```bash
+bun add zustand react-hot-toast lucide-react
+```
+
+---
+
+## 🧠 Core Concepts Learned
+
+This project demonstrates several important frontend engineering concepts:
+
+- Custom React hooks
+- Global state management with Zustand
+- Persistent state using local storage
+- Modal dialogs with backdrop blur
+- Scroll-snap interfaces
+- Browser Notifications API
+- Audio playback with the Web Audio API
+- Full-screen overlays
+- Responsive layouts with Tailwind CSS
+
+---
+
+## ⏳ How the Timer Works
+
+The timer logic is centralized in a global Zustand store.
+
+```text
+UI Components
+     ↓
+useTimerStore (Zustand)
+     ↓
+setInterval
+     ↓
+Notifications + Alarm
+     ↓
+Local Storage Persistence
+```
+
+This design ensures the timer continues seamlessly when switching between normal mode and Focus Mode.
+
+---
+
+## 🌙 Focus Mode
+
+Focus Mode is a distraction-free workspace that displays:
+
+- A large countdown timer
+- Embedded lofi music
+- Ambient gradient background
+- Keyboard shortcut support (`Esc` to exit)
+
+This creates a clean study environment similar to dedicated productivity applications.
+
+---
+
+## 🔔 Notifications
+
+When a session ends, Focus Nest:
+
+1. Shows a toast notification
+2. Sends a browser notification
+3. Plays an alarm sound
+
+This helps users stay aware even when working in another tab.
+
+---
+
+## 🗺️ Roadmap
+
+### Version 2
+
+- Authentication with [Supabase](https://supabase.com?utm_source=chatgpt.com)
+- Cloud synchronization
+- Daily streaks
+- Sessions completed today
+- Study history
+- Multi-device access
+
+### Version 3
+
+- Analytics dashboard
+- Calendar heatmaps
+- Custom themes
+- Task management
+- AI-powered study insights
+
+---
+
+## 💡 Product Vision
+
+Focus Nest is designed as a freemium productivity platform:
+
+### Free Version
+
+- Timer
+- Notes
+- Focus Mode
+- Music
+- Local persistence
+
+### Account Features
+
+- Cloud sync
+- Statistics
+- Streaks
+- History
+
+### Premium Features (Future)
+
+- Advanced analytics
+- Themes
+- Integrations
+- AI recommendations
+
+---
+
+## 📚 What I Learned
+
+Building Focus Nest helped me gain practical experience with:
+
+- Architecting scalable React applications
+- Managing shared state with Zustand
+- Persisting application state
+- Creating polished user interfaces
+- Integrating browser APIs
+- Designing products with SaaS evolution in mind
+
+---
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+---
+
+## 👨‍💻 Author
+
+**Ratnesh BVK**
+
+- [GitHub](https://github.com/ratnesh2507?utm_source=chatgpt.com)
+- Part-time YouTuber
+- Full-Stack Web Developer
+
+---
+
+## ⭐ Support
+
+If you find this project useful:
+
+- Star the repository on [GitHub](https://github.com/ratnesh2507?utm_source=chatgpt.com)
+- Share it with friends
+- Use it in your daily study sessions
+
+---
+
+> Focus Nest is a simple yet powerful productivity companion built to help you stay focused, consistent, and motivated.
