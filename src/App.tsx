@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { useTimerStore } from "./store/useTimerStore";
+import { useAuthStore } from "./store/useAuthStore";
+
 import Header from "./components/layout/Header";
 import FocusMode from "./components/layout/FocusMode";
 import SessionNotes from "./components/notes/SessionNotes";
 import TimerCard from "./components/timer/TimerCard";
 import MusicCard from "./components/music/MusicCard";
+
 import { useLocalStorage } from "./hooks/useLocalStorage";
 
 export default function App() {
@@ -13,13 +16,19 @@ export default function App() {
     false,
   );
 
-  const timer = <TimerCard />;
-  const music = <MusicCard />;
+  // Timer persistence initialization
   const initializeTimer = useTimerStore((state) => state.initialize);
+
+  // Auth initialization (optional sign-in)
+  const initializeAuth = useAuthStore((state) => state.initialize);
 
   useEffect(() => {
     initializeTimer();
-  }, [initializeTimer]);
+    initializeAuth();
+  }, [initializeTimer, initializeAuth]);
+
+  const timer = <TimerCard />;
+  const music = <MusicCard />;
 
   return (
     <div className="min-h-screen bg-bg text-text">
