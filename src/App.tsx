@@ -16,10 +16,10 @@ export default function App() {
     false,
   );
 
-  // Timer persistence initialization
+  // Initialize persisted timer state
   const initializeTimer = useTimerStore((state) => state.initialize);
 
-  // Auth initialization (optional sign-in)
+  // Initialize optional authentication
   const initializeAuth = useAuthStore((state) => state.initialize);
 
   useEffect(() => {
@@ -38,12 +38,12 @@ export default function App() {
 
           <main className="mx-auto max-w-350 px-6 py-6 h-[calc(100vh-3.5rem)]">
             <div className="grid grid-cols-[1fr_320px] gap-5 h-full">
-              {/* Notes — full-height journal */}
+              {/* Session Notes */}
               <div className="min-h-0 h-full">
                 <SessionNotes />
               </div>
 
-              {/* Right sidebar */}
+              {/* Right Sidebar */}
               <div className="flex flex-col gap-5 min-h-0">
                 {timer}
                 {music}
