@@ -50,3 +50,43 @@ export function getMonthLabel(date: Date): string {
     year: "numeric",
   });
 }
+
+/**
+ * Compare a YYYY-MM-DD string from Supabase with a Date object.
+ */
+export function isSameDate(dateString: string, date: Date): boolean {
+  return formatDate(date) === dateString;
+}
+
+/**
+ * Builds a 6x7 (42 cell) calendar grid.
+ *
+ * Empty leading/trailing cells are represented as null so the UI can
+ * render blank placeholders.
+ */
+export function getCalendarDays(currentMonth: Date): (Date | null)[] {
+  const days: (Date | null)[] = [];
+
+  const monthStart = getMonthStart(currentMonth);
+  const firstDayOffset = monthStart.getDay(); // Sunday = 0
+  const daysInMonth = getDaysInMonth(currentMonth);
+
+  // Leading empty cells
+  for (let i = 0; i < firstDayOffset; i++) {
+    days.push(null);
+  }
+
+  // Actual month dates
+  for (let day = 1; day <= daysInMonth; day++) {
+    days.push(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day),
+    );
+  }
+
+  // Fill remaining cells to make a consistent 6-week grid (42 cells)
+  while (days.length < 42) {
+    days.push(null);
+  }
+
+  return days;
+}
