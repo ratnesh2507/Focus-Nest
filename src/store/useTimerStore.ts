@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { notifySessionComplete } from "../lib/notifySessionComplete";
+import { useAuthStore } from "./useAuthStore";
+import { useStatsStore } from "./useStatsStore";
 
 type TimerStore = {
   duration: number;
@@ -33,16 +35,36 @@ export const useTimerStore = create<TimerStore>()(
           set({ timeLeft: duration });
         }
 
-        const intervalId = window.setInterval(() => {
-          const { timeLeft, pause } = get();
+        const intervalId = window.setInterval(async () => {
+          const { timeLeft, pause, duration } = get();
 
           if (timeLeft <= 1) {
+            // Stop timer and set to zero
             set({ timeLeft: 0 });
             pause();
+
+            // Browser notification + toast
             notifySessionComplete();
+
+            // If user is signed in, record session in Supabase
+            const user = useAuthStore.getState().user;
+
+            if (user) {
+              const durationMinutes = Math.floor(duration / 60);
+
+              try {
+                await useStatsStore
+                  .getState()
+                  .recordCompletedSession(user.id, durationMinutes);
+              } catch (error) {
+                console.error("Failed to record completed session:", error);
+              }
+            }
+
             return;
           }
 
+          // Countdown
           set({ timeLeft: timeLeft - 1 });
         }, 1000);
 
@@ -90,8 +112,8 @@ export const useTimerStore = create<TimerStore>()(
       initialize: () => {
         const { isRunning, intervalId, start } = get();
 
-        // After hydration, if timer was running but no valid interval exists,
-        // recreate the interval.
+        // After hydration, if timer was running but the interval
+        // itself was not persisted, recreate it.
         if (isRunning && intervalId === null) {
           set({ isRunning: false });
           start();
@@ -101,7 +123,7 @@ export const useTimerStore = create<TimerStore>()(
     {
       name: "focus-nest-timer",
 
-      // Persist only serializable state values
+      // Persist only serializable state
       partialize: (state) => ({
         duration: state.duration,
         timeLeft: state.timeLeft,
