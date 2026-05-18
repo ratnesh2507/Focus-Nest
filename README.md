@@ -16,6 +16,40 @@ Focus Nest v2 is a full-stack productivity platform built for students and devel
 
 ---
 
+## 📸 Screenshots
+
+### 🏠 Home Page
+
+The main study workspace featuring the Pomodoro timer, session notes, and ambient music player.
+
+![Home Page](public/home.png)
+
+---
+
+### 🎯 Focus Mode
+
+A distraction-free fullscreen environment with the timer and lofi music side by side.
+
+![Focus Mode](public/focus.png)
+
+---
+
+### 📊 Dashboard
+
+Your personal analytics dashboard showing profile details, total focus time, completed sessions, and streak statistics.
+
+![Dashboard](public/dashboard.png)
+
+---
+
+### 🔥 Streak Calendar
+
+A GitHub-style monthly heatmap calendar highlighting every day you studied.
+
+![Streak Calendar](public/streak.png)
+
+---
+
 ## ✨ Features
 
 ### ⏱️ Pomodoro Timer
