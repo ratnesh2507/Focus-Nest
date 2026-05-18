@@ -4,7 +4,8 @@ export async function signInWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: window.location.origin,
+      // Return the user to the dashboard after successful OAuth login
+      redirectTo: `${window.location.origin}/dashboard`,
     },
   });
 
@@ -13,7 +14,11 @@ export async function signInWithGoogle() {
 
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
+
   if (error) throw error;
+
+  // After signing out, return to the home page
+  window.location.href = "/";
 }
 
 export async function getCurrentSession() {
