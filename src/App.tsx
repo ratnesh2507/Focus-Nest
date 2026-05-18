@@ -6,6 +6,8 @@ import { useAuthStore } from "./store/useAuthStore";
 
 import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
+import AuthGate from "./features/auth/AuthGate";
+import PrivacyPage from "./pages/PrivacyPage";
 
 export default function App() {
   const initializeTimer = useTimerStore((state) => state.initialize);
@@ -19,7 +21,9 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/sign-in" element={<AuthGate />} />
       <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
     </Routes>
   );
 }

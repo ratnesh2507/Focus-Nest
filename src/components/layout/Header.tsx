@@ -10,7 +10,7 @@ export default function Header({ onToggleFocusMode }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { user, loading, signInWithGoogle, signOut } = useAuthStore();
+  const { user, loading, signOut } = useAuthStore();
 
   const fullName =
     user?.user_metadata?.full_name ||
@@ -92,7 +92,7 @@ export default function Header({ onToggleFocusMode }: Props) {
               </div>
             ) : (
               <button
-                onClick={signInWithGoogle}
+                onClick={() => navigate("/sign-in")}
                 className="flex items-center gap-2 font-ui text-sm font-medium text-muted bg-lift border border-border rounded-btn px-3 py-1.5 cursor-pointer transition-colors hover:text-text hover:bg-hover"
               >
                 <LogIn size={13} />
