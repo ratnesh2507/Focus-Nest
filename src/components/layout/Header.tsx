@@ -39,9 +39,17 @@ export default function Header({ onToggleFocusMode }: Props) {
           onClick={() => navigate("/")}
           className="flex items-center gap-2.5 cursor-pointer"
         >
+          {/* Favicon */}
+          <img
+            src="/favicon.png"
+            alt="Focus Nest Logo"
+            className="w-10 h-10 shrink-0"
+          />
+
           <span className="font-display text-lg tracking-tight text-text">
             Focus Nest
           </span>
+
           <span className="font-mono text-[10px] tracking-widest text-muted bg-lift border border-border rounded px-1.5 py-0.5">
             v2
           </span>
@@ -53,7 +61,7 @@ export default function Header({ onToggleFocusMode }: Props) {
           {!loading &&
             (user ? (
               <div className="flex items-center gap-2">
-                {/* Clickable user profile pill -> Dashboard */}
+                {/* User Profile Pill */}
                 <button
                   onClick={handleUserClick}
                   title={isDashboard ? "Back to Home" : "Open Dashboard"}
@@ -81,7 +89,7 @@ export default function Header({ onToggleFocusMode }: Props) {
                   </span>
                 </button>
 
-                {/* Sign Out Button */}
+                {/* Sign Out */}
                 <button
                   onClick={signOut}
                   title="Sign out"
@@ -100,7 +108,7 @@ export default function Header({ onToggleFocusMode }: Props) {
               </button>
             ))}
 
-          {/* Focus Mode Button (only on home page) */}
+          {/* Focus Mode Button */}
           {!isDashboard && (
             <button
               onClick={onToggleFocusMode}
