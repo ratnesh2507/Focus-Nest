@@ -3,10 +3,15 @@ import type { User } from "@supabase/supabase-js";
 import {
   fetchProfile,
   fetchStats,
-  fetchStreakDays,
+  fetchMonthlyStudyDates,
 } from "../features/dashboard/dashboardApi";
+import {
+  formatDate,
+  getMonthStart,
+  getNextMonthStart,
+} from "../features/dashboard/calendarUtils";
 
-/* Types                                                                      */
+/* Types */
 export type Profile = {
   id: string;
   email: string | null;
@@ -17,12 +22,14 @@ export type Profile = {
 
 export type UserStats = {
   user_id: string;
-  total_sessions: number;
-  total_minutes: number;
-  sessions_today: number;
   current_streak: number;
   longest_streak: number;
+  sessions_completed: number;
+  sessions_completed_today: number;
+  total_focus_minutes: number;
   longest_session_minutes: number;
+  account_age_days: number;
+  last_session_date: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -30,7 +37,7 @@ export type UserStats = {
 type DashboardStore = {
   profile: Profile | null;
   stats: UserStats | null;
-  streakDays: string[]; // ["2026-05-01", "2026-05-03", ...]
+  streakDays: string[]; // ["2026-05-01", "2026-05-03"]
 
   loading: boolean;
   error: string | null;
@@ -41,12 +48,6 @@ type DashboardStore = {
   clear: () => void;
 };
 
-/* Helpers                                                                    */
-function formatDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
-
-/* Store                                                                      */
 export const useDashboardStore = create<DashboardStore>((set) => ({
   profile: null,
   stats: null,
@@ -85,20 +86,17 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
 
   loadStreakDays: async (userId, month) => {
     try {
-      const monthStart = new Date(month.getFullYear(), month.getMonth(), 1);
+      const monthStart = getMonthStart(month);
+      const nextMonthStart = getNextMonthStart(month);
 
-      const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0);
-
-      const rows = await fetchStreakDays(
+      const dates = await fetchMonthlyStudyDates(
         userId,
         formatDate(monthStart),
-        formatDate(monthEnd),
+        formatDate(nextMonthStart),
       );
 
       set({
-        streakDays: rows.map(
-          (row: { activity_date: string }) => row.activity_date,
-        ),
+        streakDays: dates,
       });
     } catch (error) {
       console.error("Failed to load streak days:", error);
