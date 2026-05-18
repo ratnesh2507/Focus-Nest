@@ -1,34 +1,53 @@
 import { ArrowLeft, Flame, Clock, Trophy, Timer } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { useDashboardStore } from "../store/useDashboardStore";
+import { useDashboardStore, type UserStats } from "../store/useDashboardStore";
 import { useEffect } from "react";
 import StreakCalendar from "../features/dashboard/StreakCalendar";
 
 function formatMinutes(minutes: number) {
-  if (minutes < 60) {
-    return `${minutes} min`;
-  }
-
+  if (minutes < 60) return `${minutes}m`;
   const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+  const remaining = minutes % 60;
+  if (remaining === 0) return `${hours}h`;
+  return `${hours}h ${remaining}m`;
+}
 
-  if (remainingMinutes === 0) {
-    return `${hours} hr${hours !== 1 ? "s" : ""}`;
-  }
-
-  return `${hours}h ${remainingMinutes}m`;
+function getStats(stats: UserStats | null) {
+  return [
+    {
+      label: "Current Streak",
+      value: `${stats?.current_streak ?? 0}`,
+      unit: `day${(stats?.current_streak ?? 0) !== 1 ? "s" : ""}`,
+      icon: Flame,
+    },
+    {
+      label: "Total Focus",
+      value: formatMinutes(stats?.total_focus_minutes ?? 0),
+      unit: "logged",
+      icon: Clock,
+    },
+    {
+      label: "Sessions Done",
+      value: `${stats?.sessions_completed ?? 0}`,
+      unit: "sessions",
+      icon: Timer,
+    },
+    {
+      label: "Longest Streak",
+      value: `${stats?.longest_streak ?? 0}`,
+      unit: `day${(stats?.longest_streak ?? 0) !== 1 ? "s" : ""}`,
+      icon: Trophy,
+    },
+  ];
 }
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
-
   const { profile, stats, loading, error, loadDashboard } = useDashboardStore();
 
   useEffect(() => {
-    if (user) {
-      loadDashboard(user);
-    }
+    if (user) loadDashboard(user);
   }, [user, loadDashboard]);
 
   const fullName =
@@ -50,7 +69,9 @@ export default function DashboardPage() {
   if (!user) {
     return (
       <div className="min-h-screen bg-bg text-text flex items-center justify-center">
-        <p className="text-muted">Please sign in to view your dashboard.</p>
+        <p className="font-ui text-sm text-muted">
+          Please sign in to view your dashboard.
+        </p>
       </div>
     );
   }
@@ -62,116 +83,98 @@ export default function DashboardPage() {
         <div className="h-full mx-auto max-w-350 px-6 flex items-center justify-between">
           <Link
             to="/"
-            className="flex items-center gap-2 text-sm text-muted hover:text-text transition-colors"
+            className="flex items-center gap-2 font-ui text-sm text-muted hover:text-text transition-colors"
           >
             <ArrowLeft size={14} />
             Back to Study
           </Link>
-
-          <span className="font-display text-lg tracking-tight">Dashboard</span>
+          <span className="font-display text-lg tracking-tight text-text">
+            Dashboard
+          </span>
+          {/* Spacer keeps title optically centred */}
+          <div className="w-24" />
         </div>
       </header>
 
-      {/* Main */}
       <main className="mx-auto max-w-350 px-6 py-6">
-        {loading ? (
-          <div className="bg-card border border-border rounded-card p-8 text-center text-muted">
-            Loading dashboard...
+        {/* Loading */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center gap-4 py-32">
+            <div className="w-8 h-8 rounded-full border-2 border-border border-t-amber animate-spin" />
+            <span className="font-mono text-[11px] tracking-widest text-faint">
+              LOADING
+            </span>
           </div>
-        ) : error ? (
-          <div className="bg-card border border-red-500/30 rounded-card p-8 text-center text-red-300">
-            {error}
+        )}
+
+        {/* Error */}
+        {error && !loading && (
+          <div className="bg-card border border-danger-dim rounded-card p-8 text-center">
+            <p className="font-ui text-sm text-danger">{error}</p>
           </div>
-        ) : (
-          <div className="grid grid-cols-[380px_1fr] gap-6">
-            {/* Profile Panel */}
-            <section className="bg-card border border-border rounded-card p-6">
-              <div className="flex flex-col items-center text-center gap-4">
+        )}
+
+        {/* Content */}
+        {!loading && !error && (
+          <div className="grid grid-cols-[300px_1fr] gap-6 items-start">
+            {/* Left col: profile + stats */}
+            <div className="flex flex-col gap-4">
+              {/* Profile card */}
+              <section className="bg-card border border-border rounded-card p-6 flex flex-col items-center text-center gap-4">
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
                     alt={fullName}
                     referrerPolicy="no-referrer"
-                    className="w-24 h-24 rounded-full border border-border-md"
+                    className="w-20 h-20 rounded-full border border-border-md"
                   />
                 ) : (
-                  <div className="w-24 h-24 rounded-full bg-amber-glow border border-amber-dim flex items-center justify-center text-3xl font-display text-amber">
+                  <div className="w-20 h-20 rounded-full bg-amber-glow border border-amber-dim flex items-center justify-center font-display text-3xl text-amber">
                     {fullName.charAt(0).toUpperCase()}
                   </div>
                 )}
 
-                <div>
-                  <h1 className="font-display text-2xl text-text">
-                    {fullName}
-                  </h1>
-                  <p className="font-ui text-sm text-muted">
+                <div className="flex flex-col gap-0.5">
+                  <h1 className="font-display text-xl text-text">{fullName}</h1>
+                  <p className="font-ui text-xs text-muted">
                     {profile?.email || user.email}
                   </p>
                 </div>
 
-                <div className="w-full pt-4 border-t border-border">
+                <div className="w-full pt-4 border-t border-border flex flex-col gap-0.5">
                   <p className="font-mono text-[10px] tracking-widest text-faint">
                     MEMBER SINCE
                   </p>
-                  <p className="font-ui text-sm text-muted mt-1">
-                    {joinedDate}
-                  </p>
+                  <p className="font-ui text-sm text-muted">{joinedDate}</p>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            {/* Right Side */}
-            <div className="flex flex-col gap-6">
-              {/* Monthly Streak Calendar */}
-              <StreakCalendar />
-
-              {/* Stats Grid */}
-              <section className="grid grid-cols-2 gap-4">
-                {[
-                  {
-                    label: "Current Streak",
-                    value: `${stats?.current_streak ?? 0} day${
-                      (stats?.current_streak ?? 0) !== 1 ? "s" : ""
-                    }`,
-                    icon: <Flame size={16} />,
-                  },
-                  {
-                    label: "Total Focus",
-                    value: formatMinutes(stats?.total_focus_minutes ?? 0),
-                    icon: <Clock size={16} />,
-                  },
-                  {
-                    label: "Sessions Completed",
-                    value: `${stats?.sessions_completed ?? 0}`,
-                    icon: <Timer size={16} />,
-                  },
-                  {
-                    label: "Longest Streak",
-                    value: `${stats?.longest_streak ?? 0} day${
-                      (stats?.longest_streak ?? 0) !== 1 ? "s" : ""
-                    }`,
-                    icon: <Trophy size={16} />,
-                  },
-                ].map((stat) => (
+              {/* Stats — 2×2 grid */}
+              <div className="grid grid-cols-2 gap-3">
+                {getStats(stats).map(({ label, value, unit, icon: Icon }) => (
                   <div
-                    key={stat.label}
-                    className="bg-card border border-border rounded-card p-5"
+                    key={label}
+                    className="bg-card border border-border rounded-card p-4 flex flex-col gap-3"
                   >
-                    <div className="flex items-center gap-2 text-amber mb-3">
-                      {stat.icon}
+                    <div className="w-7 h-7 rounded-sm bg-amber-glow border border-amber-dim flex items-center justify-center text-amber">
+                      <Icon size={13} />
                     </div>
-
-                    <p className="font-display text-2xl text-text">
-                      {stat.value}
-                    </p>
-
-                    <p className="font-ui text-sm text-muted mt-1">
-                      {stat.label}
-                    </p>
+                    <div>
+                      <p className="font-display text-2xl text-text leading-none">
+                        {value}
+                      </p>
+                      <p className="font-mono text-[10px] tracking-widest text-faint mt-1">
+                        {unit.toUpperCase()}
+                      </p>
+                    </div>
+                    <p className="font-ui text-xs text-muted">{label}</p>
                   </div>
                 ))}
-              </section>
+              </div>
             </div>
+
+            {/* Right col: streak calendar */}
+            <StreakCalendar />
           </div>
         )}
       </main>
